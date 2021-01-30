@@ -16,7 +16,7 @@ namespace Evo.API.Controllers
     {
         [HttpGet]
         [Route("")]
-        [Authorize(Roles = "gerente")]
+        //[Authorize(Roles = "gerente")]
         public async Task<ActionResult<List<Usuarios>>> Get([FromServices] DataContext context)
         {
             var users = await context
@@ -27,9 +27,8 @@ namespace Evo.API.Controllers
         }
 
         [HttpPost]
-        [Route("")]
-        [AllowAnonymous]
-        // [Authorize(Roles = "gerente")]
+        [Route("")]        
+        //[Authorize(Roles = "gerente")]
         public async Task<ActionResult<Usuarios>> Post(
             [FromServices] DataContext context,
             [FromBody] Usuarios model)
@@ -59,7 +58,7 @@ namespace Evo.API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        [Authorize(Roles = "gerente")]
+        //[Authorize(Roles = "gerente")]
         public async Task<ActionResult<Usuarios>> Put(
             [FromServices] DataContext context,
             int id,
@@ -88,7 +87,7 @@ namespace Evo.API.Controllers
 
         [HttpPost]
         [Route("login")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate(
                     [FromServices] DataContext context,
                     [FromBody] Usuarios model)

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Linq;
 using System.Text;
 
@@ -20,10 +21,10 @@ namespace Evo.API
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-       
+        public IConfiguration Configuration { get; }        
+
         public void ConfigureServices(IServiceCollection services)
-        {
+        { 
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
@@ -52,6 +53,11 @@ namespace Evo.API
 
             //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Evo"));
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Evo API", Version = "v1" });
+            });
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -63,7 +69,14 @@ namespace Evo.API
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseSwagger();
+            
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evo API V1");
+            });
+
+            app.UseRouting();            
 
             app.UseAuthentication();
             app.UseAuthorization();            
