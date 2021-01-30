@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Evo.API.Data;
 using Evo.API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Evo.API.Controllers
 {
@@ -13,6 +14,7 @@ namespace Evo.API.Controllers
     {
         [HttpGet]
         [Route("")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Departamento>>> Get([FromServices] DataContext context)
         {
             var departamentos = await context.Departamentos.AsNoTracking().ToListAsync();
@@ -22,6 +24,7 @@ namespace Evo.API.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Departamento>> GetById(int id, [FromServices] DataContext context)
         {
             var departamento = await context.Departamentos.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
@@ -35,6 +38,7 @@ namespace Evo.API.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize(Roles = "gerente")]
         public async Task<ActionResult<Departamento>> Post([FromBody] Departamento model, [FromServices] DataContext context)
         {
             if (!ModelState.IsValid)
@@ -55,6 +59,7 @@ namespace Evo.API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize(Roles = "gerente")]
         public async Task<ActionResult<Departamento>> Put(int id, [FromBody] Departamento model, [FromServices] DataContext context)
         {
             // Verifica se o ID informado é o mesmo do modelo
@@ -83,6 +88,7 @@ namespace Evo.API.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "gerente")]
         public async Task<ActionResult<Departamento>> Delete(int id, [FromServices] DataContext context)
         {
             var category = await context.Departamentos.FirstOrDefaultAsync(x => x.Id == id);
