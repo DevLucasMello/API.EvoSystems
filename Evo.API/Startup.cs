@@ -16,19 +16,16 @@ namespace Evo.API
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+       
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
-            //Informando o DataContext para os Controllers
-            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
+            //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Evo"));
 
-            //services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));            
+            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString"))); 
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
