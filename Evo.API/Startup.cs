@@ -76,7 +76,9 @@ namespace Evo.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evo API V1");
             });
 
-            app.UseRouting();            
+            app.UseRouting();
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());            
 
             app.UseAuthentication();
             app.UseAuthorization();            
